@@ -8,6 +8,212 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos adicionales para entregas */
+        .deliverable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .deliverable-card {
+            background: #f8f9fa;
+            border-left: 4px solid;
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .deliverable-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .deliverable-card.e1 { border-left-color: #dc3545; }
+        .deliverable-card.e2 { border-left-color: #ffc107; }
+        .deliverable-card.e3 { border-left-color: #28a745; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .badge-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-status.prohibido { background: #f8d7da; color: #721c24; }
+        .badge-status.condicional { background: #fff3cd; color: #856404; }
+        .badge-status.libre { background: #d4edda; color: #155724; }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .score-item {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border-left: 3px solid #e9ecef;
+        }
+
+        .score-item strong { display: block; color: #333; }
+        .score-item .points { color: #666; font-size: 0.85rem; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            color: #333;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-section {
+            margin: 1.5rem 0;
+        }
+
+        .detail-section h3 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .detail-section ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .detail-section li {
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+
+        .requirement-box {
+            background: #f0f7ff;
+            border-left: 3px solid #0066cc;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .requirement-box strong { display: block; margin-bottom: 0.25rem; }
+
+        .points-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .points-table th,
+        .points-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .points-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .points-table tr:hover {
+            background: #fafafa;
+        }
+
+        .ai-rule {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin: 0.5rem 0;
+        }
+
+        .expand-hint {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .expand-hint::after {
+            content: "▸";
+            transition: transform 0.2s;
+        }
+
+        .deliverable-card:hover .expand-hint::after {
+            transform: rotate(90deg);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -28,91 +234,231 @@
 
     <main class="container">
         <h1>Entregas del Curso</h1>
+        <p style="color: #666; margin-bottom: 2rem;">Haz clic en cualquier entrega para ver los detalles completos de evaluación y requisitos.</p>
 
-        <section class="card">
-            <h2>Resumen de Entregas</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Entrega</th>
-                            <th>Peso</th>
-                            <th>Fecha</th>
-                            <th>Uso de IA</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>E1: El Ecosistema Inicial</strong></td>
-                            <td>30%</td>
-                            <td>Final Semana 6</td>
-                            <td><span class="badge badge-danger">Prohibido</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>E2: Borrador de Síntesis</strong></td>
-                            <td>30%</td>
-                            <td>Final Semana 10</td>
-                            <td><span class="badge badge-warning">Condicional</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>E3: Síntesis Final</strong></td>
-                            <td>40%</td>
-                            <td>Semana 14</td>
-                            <td><span class="badge badge-success">Libre (con reflexión)</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- GRID DE ENTREGAS RESUMIDAS -->
+        <div class="deliverable-grid">
+            <!-- ENTREGA 1 -->
+            <div class="deliverable-card e1" onclick="openModal('modal1')">
+                <div class="card-header">
+                    <h3 class="card-title">E1: Ecosistema Inicial</h3>
+                    <span class="badge-status prohibido">🔴 IA Prohibida</span>
+                </div>
+                <p style="margin: 0.5rem 0; color: #555;">
+                    <strong>Peso:</strong> 30% del curso<br>
+                    <strong>Fecha:</strong> Final Semana 6<br>
+                    <strong>Nota sobre:</strong> 20 puntos
+                </p>
+                <div class="score-breakdown" style="margin-top: 1rem;">
+                    <div class="score-item">
+                        <strong>Escrito</strong>
+                        <span class="points">14 pts</span>
+                    </div>
+                    <div class="score-item">
+                        <strong>Oral</strong>
+                        <span class="points">6 pts</span>
+                    </div>
+                </div>
+                <div class="expand-hint">Ver detalles</div>
             </div>
-        </section>
 
-        <section>
-            <h2>Entrega 1 (30%) — El Ecosistema Inicial</h2>
-            <div class="alert alert-danger">
-                <strong>⚠ Restricción Tecnológica:</strong> El uso de asistentes de IA (Claude, ChatGPT, Gemini) está <strong>prohibido</strong> para esta entrega. Debes demostrar que puedes leer, apropiar ideas y conectarlas sin asistencia algorítmica.
+            <!-- ENTREGA 2 -->
+            <div class="deliverable-card e2" onclick="openModal('modal2')">
+                <div class="card-header">
+                    <h3 class="card-title">E2: Borrador y Seminario</h3>
+                    <span class="badge-status condicional">🟡 IA Auditada</span>
+                </div>
+                <p style="margin: 0.5rem 0; color: #555;">
+                    <strong>Peso:</strong> 30% del curso<br>
+                    <strong>Fecha:</strong> Final Semana 10<br>
+                    <strong>Nota sobre:</strong> 20 puntos
+                </p>
+                <div class="score-breakdown" style="margin-top: 1rem;">
+                    <div class="score-item">
+                        <strong>Escrito</strong>
+                        <span class="points">7 pts</span>
+                    </div>
+                    <div class="score-item">
+                        <strong>Seminario</strong>
+                        <span class="points">13 pts</span>
+                    </div>
+                </div>
+                <div class="expand-hint">Ver detalles</div>
             </div>
-            <article class="card">
-                <h3>Componente Escrito (20%)</h3>
-                <ul>
-                    <li><strong>Documento de Posición (1500 palabras):</strong> Definición del tema, relevancia, pregunta inicial y reflexión.</li>
-                    <li><strong>Bóveda de Conocimiento:</strong> Mínimo 8 notas permanentes basadas en 8 fuentes académicas clave. Debe mostrar evidencia de proceso.</li>
-                    <li><strong>Archivo Zotero:</strong> Base de datos con mínimo 15 fuentes académicas relevantes y correctamente citadas.</li>
-                </ul>
-                <h3 class="mt-3">Componente Oral (10%)</h3>
-                <p><strong>"Explicando tu Ecosistema" (En clase, Semana 6):</strong> Presentación individual de 4 minutos mostrando tu mapa de notas y defendiendo tu pregunta inicial.</p>
-            </article>
-        </section>
 
-        <section>
-            <h2>Entrega 2 (30%) — Borrador de Síntesis y Seminario</h2>
-            <div class="alert alert-warning">
-                <strong>⚠ Uso Condicional de IA:</strong> Puedes usar asistentes de IA, pero con <strong>auditoría obligatoria</strong>. El uso no documentado será penalizado.
+            <!-- ENTREGA 3 -->
+            <div class="deliverable-card e3" onclick="openModal('modal3')">
+                <div class="card-header">
+                    <h3 class="card-title">E3: Síntesis Final</h3>
+                    <span class="badge-status libre">🟢 IA Libre + Reflexión</span>
+                </div>
+                <p style="margin: 0.5rem 0; color: #555;">
+                    <strong>Peso:</strong> 40% del curso<br>
+                    <strong>Fecha:</strong> Semana 14<br>
+                    <strong>Nota sobre:</strong> 20 puntos
+                </p>
+                <div class="score-breakdown" style="margin-top: 1rem;">
+                    <div class="score-item">
+                        <strong>Escrito</strong>
+                        <span class="points">13 pts</span>
+                    </div>
+                    <div class="score-item">
+                        <strong>Oral</strong>
+                        <span class="points">7 pts</span>
+                    </div>
+                </div>
+                <div class="expand-hint">Ver detalles</div>
             </div>
-            <article class="card">
-                <h3>Componente Escrito (10%)</h3>
-                <ul>
-                    <li><strong>Borrador de Síntesis Crítica (aprox. 1800 palabras):</strong> Bóveda actualizada con mínimo 14 notas/fuentes conectadas.</li>
-                    <li><strong>Registro IA (Obligatorio):</strong> Carpeta en Obsidian documentando: (1) prompt exacto, (2) output de la IA, (3) validación crítica.</li>
-                </ul>
-                <h3 class="mt-3">Seminario de Pares (20%)</h3>
-                <p><strong>Semanas 11 y 12:</strong> La nota proviene exclusivamente de la calidad del feedback (crítico y constructivo) que proporcionas a tus compañeros.</p>
-            </article>
-        </section>
+        </div>
 
-        <section>
-            <h2>Entrega 3 (40%) — Síntesis Final y Reflexión</h2>
-            <div class="alert alert-success">
-                <strong>⚠ Uso Libre de IA con Reflexión Crítica:</strong> El uso de IA es libre, pero se espera una reflexión crítica sobre cómo afectó tu proceso.
+        <!-- MODAL 1: ENTREGA 1 -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal1')">&times;</span>
+                <h2>📋 Entrega 1: El Ecosistema Inicial</h2>
+                <p style="color: #666; font-size: 0.95rem;"><strong>Peso en el curso:</strong> 30% | <strong>Nota sobre:</strong> 20 puntos</p>
+
+                <div class="requirement-box" style="border-left-color: #dc3545; background: #fff5f5;">
+                    <strong class="ai-rule">🔴 Regla de Oro: IA Prohibida</strong>
+                    Debes demostrar tu capacidad de leer, apropiar ideas y conectarlas sin asistencia de IA.
+                </div>
+
+                <div class="detail-section">
+                    <h3>1. Componente Escrito (14 puntos)</h3>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Documento de Posición (9 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;">Aprox. 1500 palabras.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Evaluamos:</strong> Delimitación del tema, justificación de relevancia, y diálogo real entre tus 4-6 fuentes (no un simple "desfile").</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Bóveda de Obsidian (5 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Requisito:</strong> Mínimo 8 notas permanentes conectadas.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Evaluamos:</strong> Evidencia de proceso. El "mapa" importa tanto como el territorio.</p>
+                    </div>
+
+                    <div style="background: #f0f7ff; border-left: 3px solid #0066cc; padding: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; color: #0066cc;"><strong>🔑 Llave de Paso: Zotero</strong></p>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">Debes entregar un link a tu colección con <strong>15 fuentes mínimo</strong>, correctamente citadas. <br><strong>Efecto:</strong> Sin Zotero o link inválido = No se corrige la entrega.</p>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>2. Componente Oral (6 puntos)</h3>
+                    <p style="color: #666; margin-bottom: 1rem;"><strong>"Explicando tu Ecosistema"</strong> (En clase, Semana 6)</p>
+                    <ul style="color: #666; margin: 0;">
+                        <li><strong>Duración:</strong> 4 minutos</li>
+                        <li><strong>Evaluamos:</strong> Capacidad de síntesis y defensa de tu pregunta inicial usando tu mapa de notas como apoyo visual.</li>
+                    </ul>
+                </div>
             </div>
-            <article class="card">
-                <h3>Componente Escrito (25%)</h3>
-                <ul>
-                    <li><strong>Síntesis Crítica Final (2000-2500 palabras):</strong> Bóveda con al menos 20 fuentes conectadas. Integra feedback y culmina en una pregunta de investigación.</li>
-                    <li><strong>Reflexión Metacognitiva Final (750 palabras):</strong> Ensayo sobre tu proceso personal, uso ético, sesgos y relevancia. Incluye un párrafo específico sobre tu relación con la IA.</li>
-                </ul>
-                <h3 class="mt-3">Exposición Oral Final (15%)</h3>
-                <p><strong>Semana 14 (5-6 minutos):</strong> Sintetiza los hallazgos, la pregunta/problema y el proceso metacognitivo.</p>
-            </article>
-        </section>
+        </div>
+
+        <!-- MODAL 2: ENTREGA 2 -->
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal2')">&times;</span>
+                <h2>📋 Entrega 2: Borrador y Seminario</h2>
+                <p style="color: #666; font-size: 0.95rem;"><strong>Peso en el curso:</strong> 30% | <strong>Nota sobre:</strong> 20 puntos</p>
+
+                <div class="requirement-box" style="border-left-color: #ffc107; background: #fffbf0;">
+                    <strong class="ai-rule">🟡 Regla de Oro: IA Permitida con Auditoría</strong>
+                    Puedes usar asistentes de IA, pero el uso debe estar documentado. Uso no auditado = Penalización.
+                </div>
+
+                <p style="background: #f5f5f5; padding: 1rem; border-radius: 4px; color: #666;">
+                    <strong>📌 Nota importante:</strong> El peso principal recae en la evaluación de pares (Seminario). El texto es un borrador en construcción.
+                </p>
+
+                <div class="detail-section">
+                    <h3>1. Componente Escrito (7 puntos)</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><em>Es tu pase de entrada al seminario. Debe estar completo para ser criticado.</em></p>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Borrador de Síntesis + Pregunta (4 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;">Aprox. 1800 palabras.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Requisito:</strong> Bóveda actualizada con mínimo 14 notas/fuentes conectadas.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Evaluamos:</strong> Que el Estado del Arte tenga estructura temática (no por autores) y que la pregunta emerja lógicamente de él.</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Auditoría de IA y Obsidian (3 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Requisito:</strong> Carpeta "Registro IA" en Obsidian con:</p>
+                        <ul style="color: #666; margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <li>Prompt exacto utilizado</li>
+                            <li>Output de la IA</li>
+                            <li>Tu validación crítica</li>
+                        </ul>
+                        <p style="color: #666; margin: 0.5rem 0;"><strong>Evaluamos:</strong> Honestidad y método.</p>
+                    </div>
+
+                    <div style="background: #f0f7ff; border-left: 3px solid #ffc107; padding: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; color: #856404;"><strong>🔑 Llave de Paso: Zotero</strong></p>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">Colección actualizada con <strong>14+ fuentes</strong>. <br><strong>Efecto:</strong> Sin esto, no entras al seminario.</p>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>2. Seminario de Pares (13 puntos)</h3>
+                    <p style="color: #666; margin-bottom: 1rem;"><strong>Semanas 11 y 12</strong></p>
+                    <ul style="color: #666; margin: 0;">
+                        <li><strong>Tu rol:</strong> Crítico de tus compañeros</li>
+                        <li><strong>No se nota:</strong> Tu borrador (vale pocos puntos)</li>
+                        <li><strong>Se valúa:</strong> Agudeza, respeto y utilidad de tus comentarios</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL 3: ENTREGA 3 -->
+        <div id="modal3" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('modal3')">&times;</span>
+                <h2>📋 Entrega 3: Síntesis Final</h2>
+                <p style="color: #666; font-size: 0.95rem;"><strong>Peso en el curso:</strong> 40% | <strong>Nota sobre:</strong> 20 puntos</p>
+
+                <div class="requirement-box" style="border-left-color: #28a745; background: #f0fff4;">
+                    <strong class="ai-rule">🟢 Regla de Oro: IA Libre con Reflexión</strong>
+                    El uso de IA es libre, pero se espera una reflexión crítica sobre cómo afectó tu proceso investigativo.
+                </div>
+
+                <div class="detail-section">
+                    <h3>1. Componente Escrito (13 puntos)</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><em>El producto final pulido.</em></p>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Síntesis Crítica Final (8 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;">2000-2500 palabras.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Requisito:</strong> Bóveda con al menos 18-20 fuentes conectadas.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Evaluamos:</strong> Mapeo completo del campo, detección de vacíos, integración del feedback previo, y formulación final de tu pregunta de investigación.</p>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <h4 style="margin-bottom: 0.5rem; color: #444;">Reflexión Metacognitiva (5 puntos)</h4>
+                        <p style="color: #666; margin: 0.25rem 0;">Aprox. 750 palabras.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Ensayo personal sobre:</strong> Tu proceso, uso ético, sesgos propios, y cómo cambió tu forma de entender la investigación.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Requisito específico:</strong> Un párrafo dedicado a tu relación con la IA.</p>
+                        <p style="color: #666; margin: 0.25rem 0;"><strong>Evaluamos:</strong> Profundidad y autenticidad de la reflexión.</p>
+                    </div>
+
+                    <div style="background: #f0f7ff; border-left: 3px solid #28a745; padding: 1rem; border-radius: 4px;">
+                        <p style="margin: 0; color: #155724;"><strong>🔑 Llave de Paso: Obsidian y Zotero</strong></p>
+                        <p style="margin: 0.5rem 0 0 0; color: #666;">Bóveda final y Zotero final deben ser accesibles. <br><strong>Efecto:</strong> Sin acceso a las fuentes = No se corrige.</p>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>2. Componente Oral (7 puntos)</h3>
+                    <p style="color: #666; margin-bottom: 1rem;"><strong>Exposición Final</strong> (En clase, Semana 14)</p>
+                    <ul style="color: #666; margin: 0;">
+                        <li><strong>Duración:</strong> 5-6 minutos</li>
+                        <li><strong>Evaluamos:</strong> Capacidad de contar la "historia" de tu investigación: qué sabíamos, qué faltaba (vacío), y qué aprendiste del proceso (metacognición).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer>
@@ -120,5 +466,21 @@
             <p>© 2025 Investigación Académica en la Era Digital</p>
         </div>
     </footer>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
