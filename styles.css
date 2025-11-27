@@ -769,6 +769,28 @@ details[open] .expand-icon {
 .text-success { color: var(--success); }
 
 /* ==========================================================================
+   Milestone Block
+   ========================================================================== */
+
+.milestone-block {
+    background-color: var(--bg-cream);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: var(--space-md);
+    margin: var(--space-lg) 0;
+}
+
+.milestone-block h3 {
+    margin-top: 0;
+    color: var(--blue-soft);
+}
+
+.milestone-block p {
+    color: var(--text-body);
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
    Badges
    ========================================================================== */
 
